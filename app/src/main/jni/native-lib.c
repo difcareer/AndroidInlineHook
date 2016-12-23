@@ -17,7 +17,7 @@ int hook() {
         != ELE7EN_OK) {
         return -1;
     }
-    if (inlineHook((uint32_t) puts) != ELE7EN_OK) {
+    if (inlineHook((uint32_t) origin_log) != ELE7EN_OK) {
         return -1;
     }
 
@@ -25,7 +25,7 @@ int hook() {
 }
 
 int unHook() {
-    if (inlineUnHook((uint32_t) puts) != ELE7EN_OK) {
+    if (inlineUnHook((uint32_t) origin_log) != ELE7EN_OK) {
         return -1;
     }
 
@@ -36,7 +36,8 @@ int unHook() {
 jstring
 Java_com_andr0day_androidinlinehook_MainActivity_stringFromJNI(JNIEnv *env, jobject obj) {
     origin_log("test");
-    hook();
+    int ret = hook();
+    LOGE("%d", ret);
     origin_log("test");
     unHook();
     origin_log("test");
