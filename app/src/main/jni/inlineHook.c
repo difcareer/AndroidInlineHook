@@ -269,14 +269,16 @@ enum ele7en_status registerInlineHook(uint32_t target_addr, uint32_t new_addr, u
 	}
 
 	item = addInlineHookItem();
+	memset(item, 0, sizeof(struct inlineHookItem));
 
 	item->target_addr = target_addr;
 	item->new_addr = new_addr;
 	item->proto_addr = proto_addr;
 
-	item->length = TEST_BIT0(item->target_addr) ? 12 : 8;
+	item->length = TEST_BIT0(item->target_addr) ? 10 : 8;
 	item->orig_instructions = malloc(item->length);
 	memcpy(item->orig_instructions, (void *) CLEAR_BIT0(item->target_addr), item->length);
+
 
 	item->trampoline_instructions = mmap(NULL, PAGE_SIZE, PROT_READ | PROT_WRITE | PROT_EXEC, MAP_ANONYMOUS | MAP_PRIVATE, 0, 0);
 	relocateInstruction(item->target_addr, item->orig_instructions, item->length, item->trampoline_instructions, item->orig_boundaries, item->trampoline_boundaries, &item->count);
